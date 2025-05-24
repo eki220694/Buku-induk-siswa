@@ -375,6 +375,69 @@ def get_graduated_student_record(student_id: str) -> dict | None:
         logging.error(f"An unexpected error occurred while retrieving graduated student record for {student_id}: {e}")
         return None
 
+# --- Student Search ---
+def search_students(search_term: str, search_by: str) -> list[dict]:
+    """
+    Searches for students by name or ID.
+
+    Args:
+        search_term (str): The term to search for.
+        search_by (str): The field to search by ('name' or 'id').
+
+    Returns:
+        list[dict]: A list of student dictionaries matching the search criteria.
+                    Returns an empty list if no matches or an error occurs.
+    """
+    students = []
+    if not search_term or not search_by:
+        logging.warning("Search term or search_by field is missing.")
+        return get_all_students() # Or return [] if preferred for empty search
+
+    query = "SELECT * FROM students WHERE "
+    term_with_wildcards = f"%{search_term}%"
+
+    if search_by == 'name':
+        query += "full_name LIKE ?"
+    elif search_by == 'id':
+        query += "student_id LIKE ?"
+    else:
+        logging.warning(f"Unsupported search_by criteria: {search_by}. Defaulting to all students or empty.")
+        return get_all_students() # Or return []
+
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(query, (term_with_wildcards,))
+            students = [dict(row) for row in cursor.fetchall()]
+            logging.info(f"Found {len(students)} students matching term '{search_term}' by {search_by}.")
+    except sqlite3.Error as e:
+        logging.error(f"Database error searching students: {e}")
+        return [] # Return empty list on error
+    return students
+
+# --- Combined Student Details and Grades Fetching ---
+def get_student_details_with_grades(student_id: str) -> dict | None:
+    """
+    Retrieves a student's details and all their associated grades.
+
+    Args:
+        student_id (str): The ID of the student.
+
+    Returns:
+        dict | None: A dictionary containing 'details' (student data) and 
+                     'grades' (list of grade data). Returns None if student not found.
+    """
+    student_details = get_student_by_id(student_id)
+    if not student_details:
+        return None
+    
+    student_grades = get_grades_for_student(student_id)
+    
+    return {
+        'details': student_details,
+        'grades': student_grades
+    }
+
 
 if __name__ == '__main__':
     # Example Usage (for testing purposes)
@@ -519,6 +582,40 @@ if __name__ == '__main__':
             logging.info(f"Grades: {grad_record['grades']}")
         else:
             logging.error(f"Could not retrieve graduated record for {s3_id} (UNEXPECTED).")
+
+    # Test search_students
+    logging.info(f"\n--- Testing search_students ---")
+    if s1_id:
+        logging.info(f"Searching for 'John' by name...")
+        found_john = search_students(search_term="John", search_by="name")
+        logging.info(f"Found: {[s['full_name'] for s in found_john]}")
+        assert any(s['student_id'] == s1_id for s in found_john)
+
+        logging.info(f"Searching for '{s1_id}' by id...")
+        found_s1001 = search_students(search_term=s1_id, search_by="id")
+        logging.info(f"Found: {[s['full_name'] for s in found_s1001]}")
+        assert any(s['student_id'] == s1_id for s in found_s1001)
+    
+    logging.info(f"Searching for 'Smith' by name...")
+    found_smith = search_students(search_term="Smith", search_by="name")
+    logging.info(f"Found: {[s['full_name'] for s in found_smith]}")
+    if s2_id: # s2_id corresponds to Jane Smith
+      assert any(s['student_id'] == s2_id for s in found_smith)
+    
+    # Test get_student_details_with_grades
+    logging.info(f"\n--- Testing get_student_details_with_grades ---")
+    if s1_id:
+        s1_details_grades = get_student_details_with_grades(s1_id)
+        if s1_details_grades:
+            logging.info(f"Details for {s1_id}: {s1_details_grades['details']}")
+            logging.info(f"Grades for {s1_id}: {s1_details_grades['grades']}")
+            assert s1_details_grades['details']['student_id'] == s1_id
+            # Check if grades added earlier for s1_id are present
+            if g1_id: # g1_id was for a Math grade for s1_id
+                 assert any(g['subject'] == 'Math' for g in s1_details_grades['grades'])
+        else:
+            logging.error(f"Could not retrieve details with grades for {s1_id} (UNEXPECTED).")
+
 
     if s2_id: # Test with an active (non-graduated) student
         active_grad_record = get_graduated_student_record(s2_id)
