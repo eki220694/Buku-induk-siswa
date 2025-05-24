@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Student Records</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ username }}!</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class=flashes>
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('add_student') }}">Add New Student</a></li>
+                <li><a href="{{ url_for('view_students') }}">View All Students</a></li>
+                <li><a href="{{ url_for('graduated_student_search') }}">Search Graduated Student Records</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+
+        <p>This is your central hub for managing student records.</p>
+        <!-- More dashboard content can be added here later -->
+
+    </div>
+</body>
+</html>

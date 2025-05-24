@@ -155,6 +155,25 @@ def verify_user(username: str, password: str) -> bool:
         logging.error(f"General error during verification for user '{username}': {e}")
         return False
 
+def get_user_count() -> int:
+    """
+    Counts the total number of users in the 'users' table.
+
+    Returns:
+        int: The number of users, or 0 if an error occurs or table is empty.
+    """
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM users")
+            count_result = cursor.fetchone()
+            if count_result:
+                return count_result[0]
+            return 0 # Should not happen if query is correct and table exists
+    except sqlite3.Error as e:
+        logging.error(f"Database error counting users: {e}")
+        return 0 # Return 0 on error to allow default user creation if table is missing initially
+
 if __name__ == '__main__':
     logging.info("Running example authentication operations...")
     
@@ -182,6 +201,19 @@ if __name__ == '__main__':
     admin_duplicate_created = create_user('admin_user', 'anotherpass', 'admin')
     if not admin_duplicate_created:
         logging.info("Correctly failed to create duplicate admin user.")
+
+    # Test get_user_count
+    user_count = get_user_count()
+    logging.info(f"Current user count: {user_count}")
+    if admin_created : # If the first user was indeed created now
+        expected_count = 1
+        if user_count != expected_count:
+             logging.error(f"User count expected {expected_count} but got {user_count}")
+    elif user_count == 0 and not admin_created : # User already existed
+        logging.warning(f"User count is 0 but admin_user might have existed. Test logic for count might be off if DB wasn't clean.")
+    elif user_count > 0:
+        logging.info(f"User count is > 0, which is expected if admin_user already existed or other users are present.")
+
 
     # Test user verification
     logging.info("Verifying 'admin_user' with correct password...")
