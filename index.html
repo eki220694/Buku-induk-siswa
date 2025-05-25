@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buku Induk Siswa (Firebase)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Student Records System - Firebase</h1>
+    <main id="app-content">
+        <section id="auth-container">
+            <h2>Admin Authentication</h2>
+            <div>
+                <label for="email-field">Email:</label>
+                <input type="email" id="email-field" placeholder="admin@example.com">
+            </div>
+            <div>
+                <label for="password-field">Password:</label>
+                <input type="password" id="password-field" placeholder="password">
+            </div>
+            <button id="button-signup">Sign Up (Initial Admin)</button>
+            <button id="button-login">Login</button>
+            <p id="auth-message-feedback" style="min-height: 1.2em; font-weight: bold;"></p>
+        </section>
+
+        <section id="app-container" style="display:none;">
+            <p>Logged in as: <span id="user-info-display"></span> 
+               <button id="button-logout">Logout</button>
+            </p>
+            <hr>
+            <h2>Student Record Management</h2>
+            <!-- Student CRUD UI will be added here in subsequent steps -->
+            <div id="student-management-content">
+                
+                <div id="add-student-form-container" style="margin-top: 20px; padding: 20px; border: 1px solid #ddd; background-color: #fdfdfd;">
+                    <h4>Add New Student Record</h4>
+                    <form id="form-add-student-entry">
+                        <div>
+                            <label for="input-student-id">Student ID:</label>
+                            <input type="text" id="input-student-id" required>
+                        </div>
+                        <div>
+                            <label for="input-full-name">Full Name:</label>
+                            <input type="text" id="input-full-name" required>
+                        </div>
+                        <div>
+                            <label for="input-date-of-birth">Date of Birth:</label>
+                            <input type="date" id="input-date-of-birth">
+                        </div>
+                        <div>
+                            <label for="input-gender">Gender:</label>
+                            <select id="input-gender">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="input-address">Address:</label>
+                            <textarea id="input-address" rows="3"></textarea>
+                        </div>
+                        <div>
+                            <label for="input-phone-number">Phone Number:</label>
+                            <input type="tel" id="input-phone-number">
+                        </div>
+                        <div>
+                            <label for="input-student-email">Student Email:</label>
+                            <input type="email" id="input-student-email">
+                        </div>
+                        <div>
+                            <label for="input-enrollment-year">Enrollment Year:</label>
+                            <input type="number" id="input-enrollment-year" placeholder="YYYY" min="1900" max="2100">
+                        </div>
+                        <div>
+                            <label for="input-student-status">Status:</label>
+                            <select id="input-student-status">
+                                <option value="active" selected>Active</option>
+                                <option value="graduated">Graduated</option>
+                                <option value="dropped_out">Dropped Out</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="input-graduation-year">Graduation Year (if 'graduated'):</label>
+                            <input type="number" id="input-graduation-year" placeholder="YYYY" min="1900" max="2100">
+                        </div>
+                        <button type="submit">Save New Student Record</button>
+                    </form>
+                    <p id="feedback-add-student" class="feedback-message" style="min-height: 1.2em;"></p>
+                </div>
+
+            <div id="view-all-students-container" style="margin-top: 30px; padding: 20px; border: 1px solid #28a745; background-color: #f8f9fa;">
+                <h4>Current Student Records</h4>
+                <button id="btn-fetch-students">Load/Refresh Student Records</button>
+                <div id="students-data-table-div" style="margin-top: 15px; overflow-x: auto;">
+                    <!-- HTML table will be injected here by JavaScript -->
+                </div>
+                <p id="feedback-load-students" class="feedback-message" style="min-height: 1.2em;"></p>
+            </div>
+
+            <div id="edit-student-module-container" style="display:none; margin-top: 20px; padding: 20px; border: 1px solid #ffc107; background-color: #fffaf0;">
+                <h4>Edit Student Record</h4>
+                <form id="form-update-student">
+                    <input type="hidden" id="update-doc-id-field"> 
+                    <div>
+                        <label>Student ID (Read-only):</label>
+                        <strong id="text-edit-student-id"></strong> 
+                    </div>
+                    <div><label for="field-edit-full-name">Full Name:</label><input type="text" id="field-edit-full-name" required></div>
+                    <div><label for="field-edit-date-of-birth">Date of Birth:</label><input type="date" id="field-edit-date-of-birth"></div>
+                    <div>
+                        <label for="select-edit-gender">Gender:</label>
+                        <select id="select-edit-gender">
+                            <option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div><label for="area-edit-address">Address:</label><textarea id="area-edit-address" rows="3"></textarea></div>
+                    <div><label for="field-edit-phone-number">Phone Number:</label><input type="tel" id="field-edit-phone-number"></div>
+                    <div><label for="field-edit-student-email">Student Email:</label><input type="email" id="field-edit-student-email"></div>
+                    <div><label for="field-edit-enrollment-year">Enrollment Year:</label><input type="number" id="field-edit-enrollment-year" placeholder="YYYY" min="1900" max="2100"></div>
+                    <div>
+                        <label for="select-edit-student-status">Status:</label>
+                        <select id="select-edit-student-status">
+                            <option value="active">Active</option><option value="graduated">Graduated</option><option value="dropped_out">Dropped Out</option>
+                        </select>
+                    </div>
+                    <div><label for="field-edit-graduation-year">Graduation Year:</label><input type="number" id="field-edit-graduation-year" placeholder="YYYY" min="1900" max="2100"></div>
+                    <button type="submit">Update Student Record</button>
+                    <button type="button" id="button-cancel-update">Cancel Update</button>
+                </form>
+                <p id="feedback-update-student" class="feedback-message" style="min-height: 1.2em;"></p>
+            </div>
+                
+            </div>
+        </section>
+
+        <hr style="margin: 40px 0; border-color: #ccc;">
+        <section id="public-graduated-access-section" style="padding: 20px; border: 1px solid #28a745; background-color: #f0fff0;">
+            <h2>Graduated Student Record Access</h2>
+            <p>If you are a graduated student, enter your Student ID to view your record.</p>
+            <form id="form-public-grad-search">
+                <div>
+                    <label for="input-public-grad-id">Student ID:</label>
+                    <input type="text" id="input-public-grad-id" required>
+                </div>
+                <button type="submit">Search My Record</button>
+            </form>
+            <div id="output-graduated-student-details" style="margin-top: 20px; padding: 15px; border: 1px dashed #ccc; min-height: 50px;">
+                <!-- Read-only details will appear here -->
+            </div>
+            <p id="feedback-public-grad-search" class="feedback-message" style="min-height: 1.2em;"></p>
+        </section>
+    </main>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

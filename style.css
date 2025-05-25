@@ -1,0 +1,288 @@
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5; /* Softer background */
+    color: #333;
+    line-height: 1.65;
+    font-size: 16px;
+}
+
+main#app-content {
+    width: 90%;
+    max-width: 1100px; /* Slightly wider for app content */
+    margin: 25px auto;
+    padding: 20px;
+}
+
+/* Headings */
+h1 {
+    color: #1a2533; /* Very dark (almost black) blue */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    font-weight: 600;
+}
+h2 {
+    color: #2c3e50; /* Dark blue */
+    margin-top: 30px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 10px;
+    font-size: 1.8em;
+}
+h3 {
+    color: #34495e; /* Medium dark blue */
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+h4 {
+    color: #546e7a; /* Greyish blue */
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.25em;
+}
+
+/* General Link Styling */
+a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+a:hover, a:focus {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Module Sections Styling */
+.module-container, 
+#auth-container, 
+#app-container > div, /* Direct child divs of app-container like add, view, edit modules */
+#public-graduated-access-section {
+    background-color: #ffffff;
+    padding: 25px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    border: 1px solid #e7e7e7;
+}
+/* App container itself is just a logical wrapper, no direct visible style needed unless desired */
+#app-container {
+    border: none;
+    padding: 0;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+
+/* General Form Styling */
+form div { /* Direct div children of form for consistent spacing */
+    margin-bottom: 18px;
+}
+form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.95em;
+}
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+    width: 100%; 
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box; 
+    font-size: 1em;
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+input:focus, select:focus, textarea:focus {
+    border-color: #007bff; 
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* General button styling */
+button, input[type="submit"] { 
+    background-color: #007bff; /* Primary button color */
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    margin-right: 8px; 
+    margin-bottom: 8px;
+    text-decoration: none; 
+    display: inline-block; 
+    line-height: normal; /* Ensure text is centered */
+}
+button:hover, input[type="submit"]:hover {
+    background-color: #0056b3; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+button:active, input[type="submit"]:active {
+    background-color: #004085;
+}
+
+/* Specific Button Variants */
+button.btn-secondary, .btn-secondary { 
+    background-color: #6c757d; 
+}
+button.btn-secondary:hover, .btn-secondary:hover {
+    background-color: #5a6268;
+}
+button.btn-danger, .btn-danger {
+    background-color: #dc3545;
+}
+button.btn-danger:hover, .btn-danger:hover {
+    background-color: #c82333;
+}
+button.btn-sm, .btn-sm {
+    padding: 6px 12px;
+    font-size: 0.875em;
+}
+
+fieldset {
+    border: 1px solid #dee2e6;
+    padding: 20px;
+    margin-top: 25px; 
+    margin-bottom: 25px;
+    border-radius: 4px;
+}
+legend {
+    padding: 0 10px;
+    font-weight: 600;
+    color: #495057;
+    font-size: 1.1em;
+}
+
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 20px; /* Added bottom margin */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+table th, table td {
+    border: 1px solid #e0e0e0; 
+    padding: 12px 15px; 
+    text-align: left;
+    vertical-align: middle; 
+}
+table th {
+    background-color: #f8f9fa; 
+    font-weight: 600;
+    color: #495057;
+    white-space: nowrap;
+    font-size: 0.9em;
+    text-transform: uppercase; /* Make headers uppercase */
+}
+table tr:nth-child(even) {
+    background-color: #fcfdff; /* Lighter zebra stripe */
+}
+table tr:hover {
+    background-color: #f1f5f9; /* Soft hover */
+}
+table .action-cell { /* For cells containing buttons */
+    white-space: nowrap;
+    width: 1%; /* Try to make it just wide enough for buttons */
+}
+
+
+/* Feedback Messages */
+.feedback-message {
+    padding: 12px 18px;
+    margin-top: 15px;
+    margin-bottom: 15px; 
+    border-radius: 4px;
+    font-weight: 500; 
+    border: 1px solid transparent;
+    font-size: 0.95em;
+}
+.feedback-success {
+    background-color: #d4edda; 
+    color: #155724;
+    border-color: #c3e6cb;
+}
+.feedback-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-color: #f5c6cb;
+}
+.feedback-info {
+    background-color: #d1ecf1; 
+    color: #0c5460;
+    border-color: #bee5eb;
+}
+.feedback-warning { 
+    background-color: #fff3cd;
+    color: #856404;
+    border-color: #ffeeba;
+}
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #dee2e6;
+    margin: 30px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    main#app-content {
+        width: 95%;
+        margin: 15px auto;
+        padding: 15px;
+    }
+    h1 { font-size: 1.9em; }
+    h2 { font-size: 1.6em; }
+    h3 { font-size: 1.3em; }
+    h4 { font-size: 1.1em; }
+    
+    button, input[type="submit"] { 
+        width: 100%;
+        margin-right: 0; 
+        margin-bottom: 10px;
+    }
+    button:last-of-type, input[type="submit"]:last-of-type { 
+        margin-bottom: 0; 
+    }
+    form div { 
+        /* Ensure labels and inputs stack nicely if form structure implies it */
+    }
+}
+
+@media (max-width: 480px) {
+    body { font-size: 15px; }
+    .module-container, 
+    #auth-container, 
+    #app-container > div, 
+    #public-graduated-access-section {
+        padding: 20px; /* Slightly reduce padding for very small screens */
+    }
+    table th, table td {
+        padding: 10px 8px; /* Reduce table cell padding */
+    }
+    button, input[type="submit"]{
+        padding: 12px 15px; 
+    }
+}

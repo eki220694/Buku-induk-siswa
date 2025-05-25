@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Student - Student Records</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Add New Student</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class=flashes>
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="{{ url_for('add_student') }}">
+            <fieldset>
+                <legend>Student Details</legend>
+                <div class="form-group">
+                    <label for="student_id">Student ID:</label>
+                    <input type="text" id="student_id" name="student_id" value="{{ student.student_id if student else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="full_name">Full Name:</label>
+                    <input type="text" id="full_name" name="full_name" value="{{ student.full_name if student else '' }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="date_of_birth">Date of Birth:</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth" value="{{ student.date_of_birth if student else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender">
+                        <option value="Female" {% if student and student.gender == 'Female' %}selected{% endif %}>Female</option>
+                        <option value="Male" {% if student and student.gender == 'Male' %}selected{% endif %}>Male</option>
+                        <option value="Other" {% if student and student.gender == 'Other' %}selected{% endif %}>Other</option>
+                        <option value="" {% if student and not student.gender %}selected{% endif %}>Prefer not to say</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <textarea id="address" name="address">{{ student.address if student else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="phone_number">Phone Number:</label>
+                    <input type="tel" id="phone_number" name="phone_number" value="{{ student.phone_number if student else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ student.email if student else '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="enrollment_year">Enrollment Year:</label>
+                    <input type="number" id="enrollment_year" name="enrollment_year" min="1900" max="2100" value="{{ student.enrollment_year if student else '' }}">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Initial Grades (Optional)</legend>
+                <p>Only enter grades if all details (Year Level, Subject, Grade) are known. Otherwise, leave blank.</p>
+                <div class="form-group">
+                    <fieldset>
+                        <legend>Initial Grade 1</legend>
+                        <div class="form-group">
+                            <label for="year_level_1">Year Level:</label>
+                            <input type="number" id="year_level_1" name="year_level_1" placeholder="e.g., 1 or 10">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject_1">Subject:</label>
+                            <input type="text" id="subject_1" name="subject_1" placeholder="e.g., Mathematics">
+                        </div>
+                        <div class="form-group">
+                            <label for="grade_1">Grade:</label>
+                            <input type="text" id="grade_1" name="grade_1" placeholder="e.g., A or 95">
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="form-group">
+                    <fieldset>
+                        <legend>Initial Grade 2</legend>
+                        <div class="form-group">
+                            <label for="year_level_2">Year Level:</label>
+                            <input type="number" id="year_level_2" name="year_level_2" placeholder="e.g., 1 or 10">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject_2">Subject:</label>
+                            <input type="text" id="subject_2" name="subject_2" placeholder="e.g., English">
+                        </div>
+                        <div class="form-group">
+                            <label for="grade_2">Grade:</label>
+                            <input type="text" id="grade_2" name="grade_2" placeholder="e.g., B+ or 88">
+                        </div>
+                    </fieldset>
+                </div>
+            </fieldset>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Add Student</button>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

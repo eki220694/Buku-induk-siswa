@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Records - Student Records</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Student Records</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class=flashes>
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <form method="GET" action="{{ url_for('view_students') }}" class="form-inline" style="margin-bottom: 20px;">
+            <div class="form-group" style="margin-right: 10px;">
+                <input type="text" name="search_term" placeholder="Search..." value="{{ search_term if search_term else '' }}" class="form-control">
+            </div>
+            <div class="form-group" style="margin-right: 10px;">
+                <select name="search_by" class="form-control">
+                    <option value="name" {% if search_by == 'name' %}selected{% endif %}>Name</option>
+                    <option value="id" {% if search_by == 'id' %}selected{% endif %}>Student ID</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+             <a href="{{ url_for('view_students') }}" class="btn btn-secondary" style="margin-left: 10px;">Clear Search</a>
+        </form>
+
+        {% if students %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Enrollment Year</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                    <tr>
+                        <td>{{ student.student_id }}</td>
+                        <td>{{ student.full_name }}</td>
+                        <td>{{ student.email if student.email else 'N/A' }}</td>
+                        <td>{{ student.enrollment_year if student.enrollment_year else 'N/A' }}</td>
+                        <td>{{ student.status }}</td>
+                        <td>
+                            <a href="{{ url_for('edit_student', student_id=student.student_id) }}" class="btn btn-primary btn-sm">View/Edit</a>
+                            <!-- Add other actions like delete here if needed -->
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No students found matching your criteria, or no students have been added yet.</p>
+        {% endif %}
+        
+        <div style="margin-top: 20px;">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
