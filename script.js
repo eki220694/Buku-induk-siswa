@@ -26,13 +26,30 @@ import {
 
 // IMPORTANT: TODO: User must replace these with their actual Firebase project configuration!
 const firebaseConfig = {
-  apiKey: "AIzaSy_PLACEHOLDER_API_KEY",
-  authDomain: "placeholder-project-id.firebaseapp.com",
-  projectId: "placeholder-project-id",
-  storageBucket: "placeholder-project-id.appspot.com",
-  messagingSenderId: "1234567890_PLACEHOLDER",
-  appId: "1:1234567890:web:abcdef12345_PLACEHOLDER",
-  measurementId: "G-XXXXXXXXXX_PLACEHOLDER" // Optional, but often included
+  <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBh-ArVTAd3sYQBkGyRyGn_t-dd3LKJLkI",
+    authDomain: "bukuinduksiswa-c26a1.firebaseapp.com",
+    projectId: "bukuinduksiswa-c26a1",
+    storageBucket: "bukuinduksiswa-c26a1.firebasestorage.app",
+    messagingSenderId: "309663744157",
+    appId: "1:309663744157:web:e8c08da5025e5070711474",
+    measurementId: "G-R2FYDEF7F4"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+
 };
 
 // Initialize Firebase
